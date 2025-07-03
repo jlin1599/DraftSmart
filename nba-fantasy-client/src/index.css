@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom dark, rounded scrollbars for Webkit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #18181b; /* Tailwind zinc-900 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a; /* Tailwind zinc-800 */
+  border-radius: 8px;
+  border: 2px solid #18181b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46; /* Tailwind zinc-700 */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #18181b;
+}

@@ -35,6 +35,39 @@ app.get('/api/active-players', async (req, res) => {
   }
 });
 
+app.get('/api/players/compare', async (req, res) => {
+  const ids = req.query.ids ? req.query.ids.split(',') : [];
+  if (ids.length !== 2) {
+    return res.status(400).json({ error: 'Please provide exactly two player IDs as a comma-separated list in the \"ids\" query parameter.' });
+  }
+
+  try {
+    // Fetch projections for both players in parallel
+    const playerProjections = await Promise.all(ids.map(async (id) => {
+      // Replace this with the actual Tank01 projections endpoint and parameters
+      const response = await axios.get(
+        'https://tank01-fantasy-stats.p.rapidapi.com/getNBAProjections',
+        {
+          params: { playerId: id }, // Adjust param name as needed
+          headers: {
+            'X-RapidAPI-Key': process.env.TANK01_API_KEY,
+            'X-RapidAPI-Host': process.env.TANK01_API_HOST,
+          },
+        }
+      );
+      return {
+        id,
+        projections: response.data,
+      };
+    }));
+
+    res.json(playerProjections);
+  } catch (error) {
+    console.error('Error fetching player projections:', error?.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to fetch player projections' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 }); 
