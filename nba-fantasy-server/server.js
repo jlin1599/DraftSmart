@@ -197,15 +197,15 @@ app.get('/api/players/compare', async (req, res) => {
           const projectionData = response.data?.body?.playerProjections;
           if (projectionData && Object.keys(projectionData).length > 0) {
             projections = projectionData;
-            
-            // Cache the projections
-            projectionsCache[cacheKey] = {
-              data: projections,
-              timestamp: now
-            };
           } else {
             projections = null;
           }
+          
+          // Cache the projections (including null for offseason)
+          projectionsCache[cacheKey] = {
+            data: projections,
+            timestamp: now
+          };
         } catch (err) {
           console.error(`Projection error for player ${id}:`, {
             message: err.message,

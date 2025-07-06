@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import PlayerSearch from "./components/PlayerSearch";
+import PlayerCompare from "./components/PlayerCompare";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<PlayerSearch />} />
+          <Route path="/compare" element={<PlayerCompare />} />
           {/* Add more routes here */}
         </Routes>
       </div>

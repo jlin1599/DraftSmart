@@ -14,7 +14,11 @@ function Home() {
           Player Search
         </div>
       </Link>
-      {/* Add Compare and Draft Board links later */}
+      <Link to="/compare" className="w-full">
+        <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
+          Player Compare
+        </div>
+      </Link>
     </div>
   );
 }
