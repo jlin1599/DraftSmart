@@ -63,6 +63,16 @@ function PlayerSearch() {
         player.longName.toLowerCase().includes(search.toLowerCase())
     );
 
+    // Track search when user types
+    useEffect(() => {
+        if (search && window.gtag) {
+            window.gtag('event', 'search_player', {
+                'search_term': search,
+                'results_count': filteredPlayers.length
+            });
+        }
+    }, [search]);
+
     // Sort by fantasyScore if toggled
     if (sortByFantasy) {
         filteredPlayers = filteredPlayers.sort((a, b) => b.fantasyScore - a.fantasyScore);
@@ -115,7 +125,17 @@ function PlayerSearch() {
                             <li 
                             key={player.playerID}
                             className="mb-3 px-4 py-3 rounded-xl bg-black/60 backdrop-blur-md border border-blue-500 hover:border-blue-400 shadow-lg shadow-blue-500/30 transition cursor-pointer flex flex-col sm:flex-row sm:items-center sm:justify-between text-white hover:bg-blue-900/60"
-                            onClick={() => setSelectedPlayer(player)}
+                            onClick={() => {
+                                setSelectedPlayer(player);
+                                // Track player view
+                                if (window.gtag) {
+                                    window.gtag('event', 'view_player_details', {
+                                        'player_name': player.longName,
+                                        'player_team': player.team,
+                                        'player_position': player.pos
+                                    });
+                                }
+                            }}
                             >
                             <span className="flex items-center gap-3">
                                 <img

@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import PlayerSearch from "./components/PlayerSearch";
 import PlayerCompare from "./components/PlayerCompare";
+import TopStats from "./components/TopStats";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -25,8 +27,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<PlayerSearch />} />
           <Route path="/compare" element={<PlayerCompare />} />
-          {/* Add more routes here */}
+          <Route path="/top-stats" element={<TopStats />} />
         </Routes>
+        <Footer />
       </div>
     </div>
   );

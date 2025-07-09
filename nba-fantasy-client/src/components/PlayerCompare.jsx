@@ -46,6 +46,17 @@ function PlayerCompare() {
     if (!selectedPlayer1 || !selectedPlayer2) return;
     
     setComparing(true);
+    
+    // Track comparison event
+    if (window.gtag) {
+      window.gtag('event', 'compare_players', {
+        'player1_name': selectedPlayer1.longName,
+        'player2_name': selectedPlayer2.longName,
+        'player1_team': selectedPlayer1.team,
+        'player2_team': selectedPlayer2.team
+      });
+    }
+    
     try {
       const response = await fetch(
         `http://localhost:5000/api/players/compare?ids=${selectedPlayer1.playerID},${selectedPlayer2.playerID}`
