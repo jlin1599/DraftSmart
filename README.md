@@ -85,14 +85,6 @@ nba-fantasy-client/
 
 ---
 
-## SEO & Analytics
-
-- **Sitemap:** `/public/sitemap.xml` for Google Search Console
-- **Site Verification:** `/public/google-site-verification.html`
-- **Analytics:** Google Analytics (gtag.js) in `index.html`
-- **Vercel Headers:** `vercel.json` ensures correct XML MIME type for sitemap
-
----
 
 ## Disclaimers & Credits
 
