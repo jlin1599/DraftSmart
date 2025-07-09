@@ -1,12 +1,108 @@
-# React + Vite
+# DraftSmart – NBA Fantasy Analysis Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web app for fantasy basketball players to search, compare, and analyze NBA players with real-time stats, leaderboards, and fantasy scoring.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[https://nba-draftsmart.vercel.app](https://nba-draftsmart.vercel.app)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- **Player Search:** Instantly find and analyze any NBA player with up-to-date stats and fantasy points.
+- **Player Compare:** Side-by-side comparison of two players, including projections and advanced stats.
+- **Top Stats:** View the top 50 players in key categories (points, rebounds, assists, steals, blocks, 3-pointers, fantasy points).
+- **Responsive Design:** Works beautifully on desktop and mobile.
+- **Google Analytics:** Tracks user engagement and feature usage.
+- **SEO Ready:** Includes sitemap.xml and Google site verification for search indexing.
+- **Educational Disclaimers:** Not affiliated with the NBA; data attribution included.
+
+---
+
+## Tech Stack
+
+- **Frontend:** React, Vite, Tailwind CSS, React Router
+- **Backend:** Express.js (Node.js)
+- **APIs:** [Tank01 NBA API](https://www.tank01.com/)
+- **Deployment:** Vercel
+- **Analytics:** Google Analytics
+
+---
+
+## Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/jlin1599/DraftSmart.git
+cd DraftSmart/nba-fantasy-client
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run locally
+
+```bash
+npm run dev
+```
+
+### 4. Build for production
+
+```bash
+npm run build
+```
+
+### 5. Deploy
+
+- Push to GitHub and connect to [Vercel](https://vercel.com/) for instant deployment.
+
+---
+
+## Project Structure
+
+```
+nba-fantasy-client/
+  public/
+    sitemap.xml
+    google-site-verification.html
+  src/
+    components/
+      Home.jsx
+      PlayerSearch.jsx
+      PlayerCompare.jsx
+      TopStats.jsx
+      Footer.jsx
+    App.jsx
+    main.jsx
+  vercel.json
+  package.json
+```
+
+---
+
+## SEO & Analytics
+
+- **Sitemap:** `/public/sitemap.xml` for Google Search Console
+- **Site Verification:** `/public/google-site-verification.html`
+- **Analytics:** Google Analytics (gtag.js) in `index.html`
+- **Vercel Headers:** `vercel.json` ensures correct XML MIME type for sitemap
+
+---
+
+## Disclaimers & Credits
+
+- **For educational purposes only.**
+- **Not affiliated with the NBA or any professional sports organization.**
+- **Data provided by [Tank01 API](https://www.tank01.com/).**
+- **Player images from ESPN.**
+
+---
+
+## License
+
+MIT
