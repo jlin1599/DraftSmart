@@ -46,9 +46,12 @@ function TopStats() {
         { key: 'tptfgm', label: '3-Pointers', icon: '🎯' }
     ];
 
+    // Get API URL from environment variable or default to localhost
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    
     useEffect(() => {
         setLoading(true);
-        fetch("http://localhost:5000/api/active-players")
+        fetch(`${API_BASE_URL}/api/active-players`)
             .then(res => res.json())
             .then(data => {
                 const allPlayers = data.body.flatMap(team =>

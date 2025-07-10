@@ -28,9 +28,12 @@ function PlayerCompare() {
   const [filteredPlayers2, setFilteredPlayers2] = useState([]);
   const navigate = useNavigate();
 
+  // Get API URL from environment variable or default to localhost
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:5000/api/active-players")
+    fetch(`${API_BASE_URL}/api/active-players`)
       .then(res => res.json())
       .then(data => {
         const allPlayers = data.body.flatMap(team =>
@@ -59,7 +62,7 @@ function PlayerCompare() {
     
     try {
       const response = await fetch(
-        `http://localhost:5000/api/players/compare?ids=${selectedPlayer1.playerID},${selectedPlayer2.playerID}`
+        `${API_BASE_URL}/api/players/compare?ids=${selectedPlayer1.playerID},${selectedPlayer2.playerID}`
       );
       const data = await response.json();
       setComparisonData(data);

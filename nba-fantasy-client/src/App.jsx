@@ -6,6 +6,7 @@ import TopStats from "./components/TopStats";
 import Footer from "./components/Footer";
 
 function App() {
+  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* NBA background image */}
