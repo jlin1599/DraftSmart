@@ -1,8 +1,22 @@
 import { Link } from "react-router-dom";
 
-function Home() {
+function Home({ userEmail, onLogout }) {
   return (
     <div className="max-w-4xl mx-auto p-8">
+      {/* User Welcome and Logout */}
+      <div className="flex justify-between items-center mb-8">
+        <div className="text-white">
+          <p className="text-sm text-blue-300">Welcome back,</p>
+          <p className="text-lg font-semibold">{userEmail}</p>
+        </div>
+        <button
+          onClick={onLogout}
+          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium"
+        >
+          Logout
+        </button>
+      </div>
+
       <div className="text-center mb-12">
         <h1
           className="text-5xl md:text-6xl font-extrabold text-white tracking-wide mb-4"
@@ -33,36 +47,39 @@ function Home() {
             Top Stats
           </div>
         </Link>
-        <div className="w-full">
-          <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-gray-400 border-2 border-gray-600 cursor-not-allowed">
-            Saved Players (In Progress)
+        <Link to="/saved" className="w-full">
+          <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
+            Saved Players
           </div>
-        </div>
+        </Link>
       </div>
       
       {/* App Overview */}
       <div className="mt-8 bg-black/40 backdrop-blur-sm rounded-xl p-6 border-2 border-blue-500">
         <h2 className="text-2xl font-bold text-white mb-4 text-center">How DraftSmart Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-white">
           <div className="text-center">
-            <div className="text-3xl mb-2">🔍</div>
             <h3 className="font-bold text-blue-300 mb-2">Player Search</h3>
             <p className="text-sm text-gray-300">
               Search and analyze any NBA player with detailed stats, fantasy points, and performance metrics.
             </p>
           </div>
           <div className="text-center">
-            <div className="text-3xl mb-2">⚖️</div>
             <h3 className="font-bold text-blue-300 mb-2">Player Compare</h3>
             <p className="text-sm text-gray-300">
               Side-by-side comparison of two players with projections, average draft position, and injury status.
             </p>
           </div>
           <div className="text-center">
-            <div className="text-3xl mb-2">📈</div>
             <h3 className="font-bold text-blue-300 mb-2">Top Stats</h3>
             <p className="text-sm text-gray-300">
               Discover the top 50 performers in points, rebounds, assists, steals, blocks, and 3-pointers.
+            </p>
+          </div>
+          <div className="text-center">
+            <h3 className="font-bold text-blue-300 mb-2">Saved Players</h3>
+            <p className="text-sm text-gray-300">
+              Save your favorite players for quick access during draft day. Build your personalized watchlist.
             </p>
           </div>
         </div>

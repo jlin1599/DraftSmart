@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 // Fantasy score calculation function
 function calculateFantasyScore(stats = {}) {
@@ -30,16 +31,19 @@ function calculateFantasyScore(stats = {}) {
     );
 }
 
+// Get API URL from environment variable or default to localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function PlayerSearch() {
     const [players, setPlayers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [sortByFantasy, setSortByFantasy] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState("");
+    const [savedPlayerIDs, setSavedPlayerIDs] = useState([]);
     const navigate = useNavigate();
-    
-    // Get API URL from environment variable or default to localhost
-    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     
     useEffect(() =>{
         setLoading(true);
@@ -74,12 +78,29 @@ function PlayerSearch() {
                 'results_count': filteredPlayers.length
             });
         }
-    }, [search]);
+    }, [search, filteredPlayers.length]);
 
     // Sort by fantasyScore if toggled
     if (sortByFantasy) {
         filteredPlayers = filteredPlayers.sort((a, b) => b.fantasyScore - a.fantasyScore);
     }
+
+    // Fetch saved players for the logged-in user
+    useEffect(() => {
+        const fetchSavedPlayers = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+            const user_id = session.user.id;
+            const { data, error } = await supabase
+                .from('saved_players')
+                .select('player_id')
+                .eq('user_id', user_id);
+            if (!error && data) {
+                setSavedPlayerIDs(data.map(row => row.player_id));
+            }
+        };
+        fetchSavedPlayers();
+    }, []);
 
     return (
         <>
@@ -185,7 +206,7 @@ function PlayerSearch() {
                         </div>
                         <p className="mb-2">Team: <span className="font-semibold text-blue-200">{selectedPlayer.team}</span></p>
                         <p className="mb-4">Position: <span className="font-semibold text-blue-200">{selectedPlayer.pos}</span></p>
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-2 mb-4">
                             <p>PPG: <span className="font-semibold">{selectedPlayer.stats.pts}</span></p>
                             <p>RPG: <span className="font-semibold">{selectedPlayer.stats.reb}</span></p>
                             <p>APG: <span className="font-semibold">{selectedPlayer.stats.ast}</span></p>
@@ -204,6 +225,41 @@ function PlayerSearch() {
                             <p>MPG: <span className="font-semibold">{selectedPlayer.stats.mins}</span></p>
                             <p>Games Played: <span className="font-semibold">{selectedPlayer.stats.gamesPlayed}</span></p>
                             <p>True Shooting %: <span className="font-semibold">{selectedPlayer.stats.trueShootingPercentage}</span></p>
+                        </div>
+                        {/* Save Player Button */}
+                        <div className="flex flex-col items-center mt-4">
+                            {savedPlayerIDs.includes(selectedPlayer.playerID) ? (
+                                <span className="text-green-400 font-bold text-lg">Saved!</span>
+                            ) : (
+                                <button
+                                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow transition disabled:opacity-60"
+                                    disabled={saving}
+                                    onClick={async (e) => {
+                                        e.stopPropagation();
+                                        setSaving(true);
+                                        setSaveError("");
+                                        const { data: { session } } = await supabase.auth.getSession();
+                                        if (!session) {
+                                            setSaveError("You must be logged in to save players.");
+                                            setSaving(false);
+                                            return;
+                                        }
+                                        const user_id = session.user.id;
+                                        const { error } = await supabase
+                                            .from('saved_players')
+                                            .insert([{ user_id, player_id: selectedPlayer.playerID }]);
+                                        if (error) {
+                                            setSaveError("Could not save player. Try again.");
+                                        } else {
+                                            setSavedPlayerIDs(ids => [...ids, selectedPlayer.playerID]);
+                                        }
+                                        setSaving(false);
+                                    }}
+                                >
+                                    {saving ? "Saving..." : "Save Player"}
+                                </button>
+                            )}
+                            {saveError && <span className="text-red-400 mt-2">{saveError}</span>}
                         </div>
                     </div>
                 </div>
