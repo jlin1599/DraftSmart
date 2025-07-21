@@ -26,6 +26,9 @@ function PlayerCompare() {
   const [search2, setSearch2] = useState("");
   const [filteredPlayers1, setFilteredPlayers1] = useState([]);
   const [filteredPlayers2, setFilteredPlayers2] = useState([]);
+  const [aiSummary, setAiSummary] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
   const navigate = useNavigate();
 
   // Get API URL from environment variable or default to localhost
@@ -49,6 +52,8 @@ function PlayerCompare() {
     if (!selectedPlayer1 || !selectedPlayer2) return;
     
     setComparing(true);
+    setAiSummary("");
+    setAiError("");
     
     // Track comparison event
     if (window.gtag) {
@@ -66,6 +71,52 @@ function PlayerCompare() {
       );
       const data = await response.json();
       setComparisonData(data);
+
+      // --- AI Summary Integration ---
+      if (data && data.length === 2) {
+        setAiLoading(true);
+        // Prepare player data for AI endpoint
+        const p1 = data[0];
+        const p2 = data[1];
+        const player1Data = {
+          name: p1.playerInfo.longName,
+          age: calculateAge(p1.playerInfo.bDay),
+          position: p1.playerInfo.pos,
+          adp: p1.adp ? `Overall: ${p1.adp.overallADP}, Position: ${p1.adp.posADP}` : 'N/A',
+          projectedPoints: p1.projections && p1.projections.season ? p1.projections.season.pts : 'N/A',
+          positionRank: p1.playerInfo.posRank || 'N/A',
+          mainStats: p1.mainStats ? `PPG: ${p1.mainStats.pts}, RPG: ${p1.mainStats.reb}, APG: ${p1.mainStats.ast}, SPG: ${p1.mainStats.stl}, BPG: ${p1.mainStats.blk}, TOV: ${p1.mainStats.TOV}, Fantasy Points: ${p1.mainStats.fantasyPoints.toFixed(1)}` : 'N/A',
+          injuryStatus: p1.injuries && p1.injuries.length > 0 ? p1.injuries.map(i => `${i.designation}: ${i.description}`).join('; ') : 'Healthy'
+        };
+        const player2Data = {
+          name: p2.playerInfo.longName,
+          age: calculateAge(p2.playerInfo.bDay),
+          position: p2.playerInfo.pos,
+          adp: p2.adp ? `Overall: ${p2.adp.overallADP}, Position: ${p2.adp.posADP}` : 'N/A',
+          projectedPoints: p2.projections && p2.projections.season ? p2.projections.season.pts : 'N/A',
+          positionRank: p2.playerInfo.posRank || 'N/A',
+          mainStats: p2.mainStats ? `PPG: ${p2.mainStats.pts}, RPG: ${p2.mainStats.reb}, APG: ${p2.mainStats.ast}, SPG: ${p2.mainStats.stl}, BPG: ${p2.mainStats.blk}, TOV: ${p2.mainStats.TOV}, Fantasy Points: ${p2.mainStats.fantasyPoints.toFixed(1)}` : 'N/A',
+          injuryStatus: p2.injuries && p2.injuries.length > 0 ? p2.injuries.map(i => `${i.designation}: ${i.description}`).join('; ') : 'Healthy'
+        };
+        try {
+          const aiRes = await fetch(`${API_BASE_URL}/api/ai/compare-summary`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ player1: player1Data, player2: player2Data })
+          });
+          const aiData = await aiRes.json();
+          if (aiData.summary) {
+            setAiSummary(aiData.summary);
+          } else {
+            setAiError('AI summary not available.');
+          }
+        } catch {
+          setAiError('Failed to fetch AI summary.');
+        } finally {
+          setAiLoading(false);
+        }
+      }
+      // --- End AI Summary Integration ---
     } catch (error) {
       console.error('Error comparing players:', error);
     } finally {
@@ -89,6 +140,25 @@ function PlayerCompare() {
         <h1 className="text-4xl font-extrabold mb-6 text-center tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-blue-500 drop-shadow-lg">
           Player Compare
         </h1>
+
+        {/* AI Summary */}
+        {aiLoading && (
+          <div className="text-center mb-6">
+            <span className="text-blue-300 font-semibold">Generating AI summary...</span>
+          </div>
+        )}
+        {aiError && (
+          <div className="text-center mb-6">
+            <span className="text-red-400 font-semibold">{aiError}</span>
+          </div>
+        )}
+        {aiSummary && (
+          <div className="text-center mb-6">
+            <div className="inline-block bg-blue-900/40 border border-blue-400 rounded-xl px-6 py-4 shadow text-white text-lg font-medium max-w-2xl">
+              {aiSummary}
+            </div>
+          </div>
+        )}
 
         {/* Player Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

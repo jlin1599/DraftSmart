@@ -254,6 +254,64 @@ app.get('/api/players/compare', async (req, res) => {
   }
 });
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+// AI-powered player comparison summary endpoint
+app.post('/api/ai/compare-summary', async (req, res) => {
+  const { player1, player2 } = req.body;
+  if (!player1 || !player2) {
+    return res.status(400).json({ error: 'Both player1 and player2 data are required.' });
+  }
+  if (!OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'OpenAI API key not configured.' });
+  }
+
+  // Helper to format player info for the prompt
+  function formatPlayer(player, label) {
+    return `\n${label}:\n` +
+      `Name: ${player.name}\n` +
+      `Age: ${player.age}\n` +
+      `Position: ${player.position}\n` +
+      `ADP: ${player.adp}\n` +
+      `Projected Points: ${player.projectedPoints}\n` +
+      `Position Rank: ${player.positionRank}\n` +
+      `Main Stats: ${player.mainStats}\n` +
+      `Injury History: ${player.injuryStatus}`;
+  }
+
+  // Build the prompt
+  const prompt =
+    `You are a fantasy basketball expert. Compare the following two NBA players for a fantasy basketball manager. Consider their age (note if one is older and may decline), ADP (average draft position), projected points, position ranking, main stats, and injury history (determine if the player is injury prone based on the provided history). Give a concise, actionable summary (2-3 sentences, no more than 120 words) of their strengths, weaknesses, and who might be the better pick in a standard league.` +
+    formatPlayer(player1, 'Player 1') +
+    formatPlayer(player2, 'Player 2');
+
+  try {
+    const openaiRes = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'You are a helpful fantasy basketball assistant.' },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 180,
+        temperature: 0.7
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    const summary = openaiRes.data.choices[0].message.content.trim();
+    res.json({ summary });
+  } catch (error) {
+    console.error('OpenAI API error:', error?.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to generate AI summary.' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
