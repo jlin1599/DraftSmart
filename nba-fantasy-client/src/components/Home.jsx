@@ -35,21 +35,25 @@ function Home({ userEmail, onLogout }) {
         <Link to="/search" className="w-full">
           <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
             Player Search
+            <div className="text-xs font-normal text-blue-200 mt-1">Save players to your watchlist before the draft</div>
           </div>
         </Link>
         <Link to="/compare" className="w-full">
           <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
             Player Compare
+            <div className="text-xs font-normal text-blue-200 mt-1">Now with AI-powered draft advice!</div>
           </div>
         </Link>
         <Link to="/top-stats" className="w-full">
           <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
             Top Stats
+            <div className="text-xs font-normal text-blue-200 mt-1">See the top 50 players in every key stat</div>
           </div>
         </Link>
         <Link to="/saved" className="w-full">
           <div className="relative rounded-xl p-6 text-center text-xl font-bold shadow-lg bg-black/40 backdrop-blur-sm text-white border-2 border-blue-500 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all duration-300 cursor-pointer">
             Saved Players
+            <div className="text-xs font-normal text-blue-200 mt-1">Quick access to your draft watchlist</div>
           </div>
         </Link>
       </div>
@@ -61,13 +65,13 @@ function Home({ userEmail, onLogout }) {
           <div className="text-center">
             <h3 className="font-bold text-blue-300 mb-2">Player Search</h3>
             <p className="text-sm text-gray-300">
-              Search and analyze any NBA player with detailed stats, fantasy points, and performance metrics.
+              Search and analyze any NBA player with detailed stats, fantasy points, and performance metrics. Save your favorite players to your watchlist before draft day.
             </p>
           </div>
           <div className="text-center">
             <h3 className="font-bold text-blue-300 mb-2">Player Compare</h3>
             <p className="text-sm text-gray-300">
-              Side-by-side comparison of two players with projections, average draft position, and injury status.
+              Side-by-side comparison of two players with projections, average draft position, injury status, <span className='text-blue-200 font-semibold'>and AI-powered draft advice.</span>
             </p>
           </div>
           <div className="text-center">
