@@ -42,7 +42,7 @@ function Login() {
         </div>
 
         <div className="bg-black/40 backdrop-blur-sm rounded-xl p-8 border-2 border-blue-500 shadow-2xl">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign In</h2>
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Save Your Picks</h2>
           <button
             type="button"
             onClick={handleGoogleSignIn}
@@ -50,8 +50,11 @@ function Login() {
             className="w-full flex items-center justify-center gap-2 bg-white text-black font-bold py-3 px-4 rounded-lg shadow hover:bg-gray-100 transition-all duration-200 mb-2 border border-gray-300"
           >
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-6 w-6" />
-            {isLoading ? "Signing in..." : "Sign in with Google"}
+            {isLoading ? "Logging in..." : "Log in to Keep Track"}
           </button>
+          <div className="text-xs text-gray-300 text-center mt-2 mb-1">
+            We ask for login only so you can save your favorite players and track them later. No emails, no spam.
+          </div>
           {error && (
             <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mt-4">
               <p className="text-red-300 text-sm">{error}</p>

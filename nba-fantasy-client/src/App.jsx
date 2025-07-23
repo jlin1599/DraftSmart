@@ -92,34 +92,20 @@ function App() {
           <Route 
             path="/" 
             element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Home userEmail={userEmail} onLogout={handleLogout} />
-              </ProtectedRoute>
-            } 
+              <Home userEmail={userEmail} onLogout={handleLogout} />
+            }
           />
           <Route 
             path="/search" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <PlayerSearch />
-              </ProtectedRoute>
-            } 
+            element={<PlayerSearch />} 
           />
           <Route 
             path="/compare" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <PlayerCompare />
-              </ProtectedRoute>
-            } 
+            element={<PlayerCompare />} 
           />
           <Route 
             path="/top-stats" 
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <TopStats />
-              </ProtectedRoute>
-            } 
+            element={<TopStats />} 
           />
           <Route 
             path="/saved" 

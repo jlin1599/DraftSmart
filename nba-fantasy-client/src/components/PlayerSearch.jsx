@@ -240,8 +240,8 @@ function PlayerSearch() {
                                         setSaveError("");
                                         const { data: { session } } = await supabase.auth.getSession();
                                         if (!session) {
-                                            setSaveError("You must be logged in to save players.");
                                             setSaving(false);
+                                            navigate('/login', { replace: true });
                                             return;
                                         }
                                         const user_id = session.user.id;
